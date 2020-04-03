@@ -1,15 +1,17 @@
 const util = require("util")
 const fs = require("fs")
 const uuidv1 = require('uuid/v1');
-const readfile = util.promisify(fs.readfile)
-const writefile = util.promisify(fs.writefile)
+const readfile = util.promisify(fs.readFile)
+const writefile = util.promisify(fs.writeFile)
 
-class Store {
+class Data {
     read(){
         return readfile("db/db.json","utf8")
     }
     write(note){
-        return writefile("db/db.json", JSON.stringify(note))
+        return writefile("db/db.json", JSON.stringify(note)),
+
+        console.log("NOTE",note)
     }
     getNotes(){
         return this.read().then(notes => {
@@ -27,7 +29,7 @@ class Store {
         const title = note.title
         const entery = note.text
         if(!title  || !entery)
-{
+           {
             console.log("cannot be empty")
             throw "Title or Message is empty, please enter text."
         }
@@ -36,12 +38,13 @@ class Store {
             text:entery,
             id: uuidv1()
         }
-        return this.getNotes().then(note => [...note, newRecord]).then(updateNote => this.writefile(updateNote))
+        return this.getNotes().then(note => [...note, newRecord]).then(updateNote => this.write(updateNote))
         .then(() => allNotes)
     }
     removeNote(id){
+        console.log("Delete Method",id)
         return this.getNotes().then(noteDelete => noteDelete.filter(currentNote => currentNote.id !== id))
-        .then(upnotes => this.writefile(upnotes))
+        .then(upnotes => this.write(upnotes))
     }
 }
-module.exports = new Store()
+module.exports = new Data()

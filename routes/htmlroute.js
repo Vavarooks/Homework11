@@ -6,6 +6,6 @@ apps.get("/note", function(req, res){
 })
 apps.get("*", function(req, res){
     console.log("/")
-    res.sendFile(path.join(__dirname, "./public/index.html"))
+    res.sendFile(path.join(__dirname, "../public/index.html"))
 })
 module.exports = apps;

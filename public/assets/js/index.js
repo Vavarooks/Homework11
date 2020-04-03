@@ -75,10 +75,11 @@ var handleNoteDelete = function (event) {
     activeNote = {};
   }
 
-  deleteNote(note.id).then(function () {
+  deleteNote(note.id).then(function (resp) {
     getAndRenderNotes();
-    renderActiveNote();
+   // renderActiveNote();
   });
+  window.location.reload();
 };
 
 // Sets the activeNote and displays it
@@ -128,6 +129,7 @@ var renderNoteList = function (notes) {
 // Gets notes from the db and renders them to the sidebar
 var getAndRenderNotes = function () {
   return getNotes().then(function (data) {
+    console.log("Rendered", data)
     renderNoteList(data);
   });
 };
