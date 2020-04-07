@@ -6,13 +6,13 @@ apps.get("/notes", function (req,res){
     .catch(error => res.json(error))
 })
 apps.post("/notes", function (req,res){
-    console.log("Post route",req.body)
+   
     data.addNote(req.body)
     .then(notes => res.json(notes))
     .catch(error => res.json(error))
 })
 apps.delete("/notes/:id", function (req,res){
-    console.log("Deleted")
+
     data.removeNote(req.params.id)
     .then(notes => res.json(notes))
     .catch(error => res.json(error))

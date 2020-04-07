@@ -5,46 +5,44 @@ const readfile = util.promisify(fs.readFile)
 const writefile = util.promisify(fs.writeFile)
 
 class Data {
-    read(){
-        return readfile("db/db.json","utf8")
+    read() {
+        return readfile("db/db.json", "utf8")
     }
-    write(note){
+    write(note) {
         return writefile("db/db.json", JSON.stringify(note)),
-
-        console.log("NOTE",note)
     }
-    getNotes(){
+
+    getNotes() {
         return this.read().then(notes => {
             var journel;
             try {
                 journel = [].concat(JSON.parse(notes));
             }
-            catch(error){
+            catch (error) {
                 journel = [];
             }
             return journel;
         })
     }
-    addNote(note){
+    addNote(note) {
         const title = note.title
         const entery = note.text
-        if(!title  || !entery)
-           {
+        if (!title || !entery) {
             console.log("cannot be empty")
             throw "Title or Message is empty, please enter text."
         }
         const newRecord = {
-            title:title,
-            text:entery,
+            title: title,
+            text: entery,
             id: uuidv1()
         }
         return this.getNotes().then(note => [...note, newRecord]).then(updateNote => this.write(updateNote))
-        .then(() => allNotes)
+            .then(() => allNotes)
     }
-    removeNote(id){
-        console.log("Delete Method",id)
+    removeNote(id) {
+
         return this.getNotes().then(noteDelete => noteDelete.filter(currentNote => currentNote.id !== id))
-        .then(upnotes => this.write(upnotes))
+            .then(upnotes => this.write(upnotes))
     }
 }
 module.exports = new Data()
